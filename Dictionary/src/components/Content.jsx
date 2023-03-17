@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { GiArchiveResearch } from "react-icons/gi";
 import { SiBbciplayer } from "react-icons/si";
 import Seprator from "./Seprator";
+import { getMeaningWord } from "../service/Dictionary";
+import { DictionaryContext } from "../context/Dictionary";
 
 const Container = styled.div`
   width: 100vw;
@@ -104,23 +106,56 @@ const Synonyms = styled.div`
   text-align: left;
   gap: 20px;
 `;
+const Sources = styled.div`
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+  margin-top: 2rem;
+  text-align: left;
+  gap: 20px;
+  flex-direction: column;
+  margin-bottom: 5rem;
+`;
+const Meaning = styled.h2`
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  font-size: 20px;
+  font-weight: 500;
+  color: grey;
+  margin-top: 2rem;
+  text-align: left;
+`;
 const Content = () => {
+  const [data, setData] = useState([]);
+  const [word, setWord] = useState("");
+  console.log(data[0]);
   return (
     <Container>
       <InputContainer>
-        <Input type="text" />
+        <Input type="text" onChange={(e) => setWord(e.target.value)} />
         <GiArchiveResearch
           style={{
             fontSize: "30px",
             color: " #be4ade",
             cursor: "pointer",
           }}
+          onClick={() => {
+            getMeaningWord(word).then((data) => {
+              setData(data.data);
+            });
+          }}
         />
       </InputContainer>
       <WordContainer>
         <Word>
-          Word
-          <P>/hey/:d/</P>
+          {word}
+          <P>{data[0]?.phonetic}</P>
         </Word>
         <SiBbciplayer
           style={{
@@ -128,33 +163,48 @@ const Content = () => {
             color: " #be4ade",
             cursor: "pointer",
           }}
+          onClick={() => {
+            const audio = new Audio(data[0].phonetics[0].audio);
+            audio.play();
+          }}
         />
       </WordContainer>
-      <Seprator name="noun" Meanings="Meaning" />
-      <Ul>
-        <LI>kfjkdkfgkfgekfekfgkegfkegekfgekgekg</LI>
-        <LI>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero
-          doloribus rerum possimus sapiente blanditiis, ullam, nemo tenetur
-          vitae veniam voluptate temporibus soluta quisquam consectetur
-          accusantium? Facere harum vitae accusantium fugit!
-        </LI>
-        <LI>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-          velit maxime laboriosam, ad eveniet consequuntur repellendus
-          reprehenderit tempora neque a porro hic animi earum eligendi
-          accusantium distinctio! Itaque, unde fugiat.
-        </LI>
-      </Ul>
-      <Synonyms>
-        Synonyms <P className="synonym">electronic Keyboard</P>
-      </Synonyms>
-      <Seprator name="verb" Meanings="Meaning" />
-      <Ul>
-        <LI>kfjkdkfgkfgekfekfgkegfkegekfgekgekg</LI>
-        <LI className="quot">"igigigititefteifetet"</LI>
-      </Ul>
-      <Seprator Meanings="Source" />
+      {data[0]?.meanings?.map(({ partOfSpeech, definitions }) => (
+        <>
+          <Seprator name={partOfSpeech} Meanings="Meaning" />
+          <Ul>
+            {definitions?.map((definition) => (
+              <LI key={definition?.definition}>
+                {definition?.definition}
+                {definition?.example && <p>{definition?.example}</p>}
+              </LI>
+            ))}
+          </Ul>
+        </>
+      ))}
+      <Meaning>Synonyms</Meaning>
+      {data[0]?.meanings?.map(({ partOfSpeech, synonyms }) => (
+        <>
+          <Synonyms>
+            {synonyms?.map((synonym) => (
+              <Synonyms key={synonym}>
+                <P className="synonym">{synonym}</P>
+              </Synonyms>
+            ))}
+          </Synonyms>
+        </>
+      ))}
+
+      <Sources>
+        <Seprator Meanings="Sources" />
+        {data[0]?.sourceUrls?.map((url) => (
+          <Ul>
+            <LI className="quot">
+              <a href={url}> {url}</a>
+            </LI>
+          </Ul>
+        ))}
+      </Sources>
     </Container>
   );
 };
