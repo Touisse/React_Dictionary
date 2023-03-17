@@ -43,3 +43,7 @@ The Merriam-Webster API is used under license from Merriam-Webster Inc.
 ## License
 
 This app is licensed under the [MIT License](LICENSE).
+
+<img width="1878" alt="Screen Shot 2023-03-17 at 8 47 43 PM" src="https://user-images.githubusercontent.com/63207127/226016318-fd647af9-4633-4cbf-bfce-efea3136dcdc.png">
+<img width="1818" alt="Screen Shot 2023-03-17 at 8 48 11 PM" src="https://user-images.githubusercontent.com/63207127/226016354-9c86e669-e7e9-4c5e-9b7e-e7717516da58.png">
+<img width="486" alt="Screen Shot 2023-03-17 at 8 48 29 PM" src="https://user-images.githubusercontent.com/63207127/226016370-df2bfcd0-37d2-4bf4-b8e4-788d7afc6d4c.png">
