@@ -191,6 +191,7 @@ const Content = () => {
                 <P className="synonym">{synonym}</P>
               </Synonyms>
             ))}
+            
           </Synonyms>
         </>
       ))}
